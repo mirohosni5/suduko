@@ -1,6 +1,6 @@
 package checker;
 
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class RowChecker {
