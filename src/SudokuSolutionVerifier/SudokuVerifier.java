@@ -21,15 +21,15 @@ public class SudokuVerifier {
           try {
             mode = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            System.out.println("Error: Mode must be a number!");
+            System.out.println("Invalid mode.Mode must be number");
             System.out.println("Valid modes: 0, 3, or 27");
             return;
         }
            if (mode != 0 && mode != 3 && mode != 27) {
-            System.out.println("Error: Invalid mode '" + mode + "'");
-            System.out.println("Valid modes: 0, 3, or 27");
+            System.out.println("Invalid mode.Valid modes:(0,3,27)");
             return;
         }
+           
     }
     
 }
