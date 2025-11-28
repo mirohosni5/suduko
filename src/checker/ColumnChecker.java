@@ -1,7 +1,7 @@
 package checker;
 
 
-import java.util.*
+import java.util.*;
 
 public class ColumnChecker {
 
