@@ -18,5 +18,13 @@ public class DuplicateValue {
         this.value = value;
         this.positions = positions;
     }
+
+    public int getValue() {
+        return value;
+    }
+
+    public List<Integer> getPositions() {
+        return positions;
+    }
     
 }
