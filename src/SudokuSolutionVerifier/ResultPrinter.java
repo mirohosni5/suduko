@@ -35,6 +35,11 @@ public class ResultPrinter {
                 if (result.getDuplicates().containsKey(key)) {
                     for (DuplicateValue info : result.getDuplicates().get(key)) {
                         System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
+         for (int i = 1; i <= 9; i++) {
+                String key = "BOX " + i;
+                if (result.getDuplicates().containsKey(key)) {
+                    for (DuplicateValue info : result.getDuplicates().get(key)) {
+                        System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
         }
     }
 }
