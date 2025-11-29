@@ -16,12 +16,14 @@ import java.util.*;
 //
 
 
-public class ThreeThreadMode extends BasicChecks {
+public class ThreeThreadMode extends BasicChecks implements SudokuMode {
 
     public ThreeThreadMode(int[][] board) {
         super(board);
     }
-
+public ThreeThreadMode() {
+    super(null);
+}
     public ValidationResult verify(int[][] boardIgnored) {
 
         ExecutorService executor = Executors.newFixedThreadPool(3);
