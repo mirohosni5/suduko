@@ -10,6 +10,4 @@ package SudokuSolutionVerifier;
  */
 public interface SudokuMode {
      public abstract ValidationResult verify(int[][] board);
-
-    ValidationResult run();
 }
