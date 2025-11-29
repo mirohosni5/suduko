@@ -35,6 +35,12 @@ public class TwentySevenThreadMode implements SudokuMode {
             threads.add(t);
             t.start();
         }
+        // 9 Box threads
+        for (int i = 0; i < 9; i++) {
+            Thread t = new Thread(new SingleBoxThread(i, board, errors));
+            threads.add(t);
+            t.start();
+        }
 
     }
 }
