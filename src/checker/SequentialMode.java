@@ -22,7 +22,7 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
         return checkAll();
     }
 
-    
+
     public void printResult() {
         List<String> errors = validate();
 
