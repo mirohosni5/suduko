@@ -4,6 +4,9 @@
  */
 package SudokuSolutionVerifier;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  *
  * @author M
@@ -29,7 +32,22 @@ public class SudokuVerifier {
             System.out.println("Invalid mode.Valid modes:(0,3,27)");
             return;
         }
-           
-    }
-    
+            int[][] board ;
+            try {
+            board = CSVReader.getInstance().readCSV(filePath);
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File not found '" + filePath + "'");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error: Could not read file '" + filePath + "'");
+            return;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            return;
+        }
+        SudokuMode verifier = ModesFactory.createMode(mode);
+        ValidationResult result = verifier.verify(board);
+        
+        ResultPrinter.getInstance().printResult(result);
+    } 
 }
