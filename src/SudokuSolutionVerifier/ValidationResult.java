@@ -37,12 +37,11 @@ public class ValidationResult {
         duplicates.computeIfAbsent(key, k -> new ArrayList<>()).add(info);
         this.valid = false;
     }
-
-    public void merge(ValidationResult other) {
-        if (!other.isValid()) {
+    public void merge(ValidationResult o) {
+        if (!o.isValid()) {
             this.valid = false;
         }
-        other.getDuplicates().forEach((key, list) -> {
+        o.getDuplicates().forEach((key, list) -> {
             duplicates.computeIfAbsent(key, k -> new ArrayList<>()).addAll(list);
         });
     }
