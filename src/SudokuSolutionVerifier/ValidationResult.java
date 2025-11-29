@@ -22,6 +22,9 @@ public class ValidationResult {
         this.duplicates = new ConcurrentHashMap<>();
     }
 
+    public ValidationResult(boolean valid, List<String> errors) {
+    }
+
     public boolean isValid() {
         return valid;
     }
