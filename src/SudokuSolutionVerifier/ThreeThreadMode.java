@@ -21,27 +21,29 @@ public class ThreeThreadMode extends BasicChecks implements SudokuMode {
     public ThreeThreadMode(int[][] board) {
         super(board);
     }
-public ThreeThreadMode() {
-    super(null);
-}
+
+    public ThreeThreadMode() {
+        super(null);
+    }
+
     public ValidationResult verify(int[][] boardIgnored) {
 
         ExecutorService executor = Executors.newFixedThreadPool(3);
         List<Future<ValidationResult>> futures = new ArrayList<>();
 
-        
+
         futures.add(executor.submit(() -> {
             ValidationResult result = new ValidationResult();
             for (String err : checkRows()) {
                 result.addDuplicate(
                         "Row",
-                        new DuplicateValue(-1, List.of())   
+                        new DuplicateValue(-1, List.of())
                 );
             }
             return result;
         }));
 
-        
+
         futures.add(executor.submit(() -> {
             ValidationResult result = new ValidationResult();
             for (String err : checkColumns()) {
@@ -52,7 +54,7 @@ public ThreeThreadMode() {
             }
             return result;
         }));
-        
+
 
         futures.add(executor.submit(() -> {
             ValidationResult result = new ValidationResult();
