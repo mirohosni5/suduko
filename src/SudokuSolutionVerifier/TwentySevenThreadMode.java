@@ -50,5 +50,8 @@ public class TwentySevenThreadMode implements SudokuMode {
             }
         }
 
+        boolean isValid = errors.isEmpty();
+        return new ValidationResult(isValid, errors);
     }
+
 }

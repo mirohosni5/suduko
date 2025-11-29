@@ -16,10 +16,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ValidationResult {
     private boolean valid;
     private Map<String, List<DuplicateValue>> duplicates;
+    public List<String> errors;
 
     public ValidationResult() {
         this.valid = true;
         this.duplicates = new ConcurrentHashMap<>();
+    }
+    public ValidationResult(boolean valid, List<String> errors) {
+        this.valid = valid;
+        this.errors = errors;
     }
     public boolean isValid() {
         return valid;
