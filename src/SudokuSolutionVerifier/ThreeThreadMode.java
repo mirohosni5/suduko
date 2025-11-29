@@ -3,14 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package SudokuSolutionVerifier;
+
 import checker.BasicChecks;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
 import java.util.concurrent.*;
+import java.util.*;
+
 /**
  *
  * @author Engyz
@@ -18,42 +16,58 @@ import java.util.concurrent.*;
 //
 
 
-class ThreeThreadMode extends BasicChecks {
+public class ThreeThreadMode extends BasicChecks {
 
-public ThreeThreadMode(int[][] board) {
+    public ThreeThreadMode(int[][] board) {
         super(board);
     }
 
-public ValidationResult verify() {
+    public ValidationResult verify(int[][] boardIgnored) {
+
         ExecutorService executor = Executors.newFixedThreadPool(3);
         List<Future<ValidationResult>> futures = new ArrayList<>();
 
-       
-futures.add(executor.submit(() -> {
+        
+        futures.add(executor.submit(() -> {
             ValidationResult result = new ValidationResult();
-            checkRows().forEach(result::addError); 
+            for (String err : checkRows()) {
+                result.addDuplicate(
+                        "Row",
+                        new DuplicateValue(-1, List.of())   
+                );
+            }
             return result;
         }));
 
         
-futures.add(executor.submit(() -> {
-   ValidationResult result = new ValidationResult();
-   checkColumns().forEach(result::addError);
-    return result;
+        futures.add(executor.submit(() -> {
+            ValidationResult result = new ValidationResult();
+            for (String err : checkColumns()) {
+                result.addDuplicate(
+                        "Column",
+                        new DuplicateValue(-1, List.of())
+                );
+            }
+            return result;
         }));
-
         
-futures.add(executor.submit(() -> {
-   ValidationResult result = new ValidationResult();
-   checkBoxes().forEach(result::addError);
-    return result;
+
+        futures.add(executor.submit(() -> {
+            ValidationResult result = new ValidationResult();
+            for (String err : checkBoxes()) {
+                result.addDuplicate(
+                        "Box",
+                        new DuplicateValue(-1, List.of())
+                );
+            }
+            return result;
         }));
 
-  ValidationResult finalResult = new ValidationResult();
+        ValidationResult finalResult = new ValidationResult();
         for (Future<ValidationResult> future : futures) {
             try {
                 finalResult.merge(future.get());
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
