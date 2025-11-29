@@ -22,13 +22,16 @@ public class ValidationResult {
         this.valid = true;
         this.duplicates = new ConcurrentHashMap<>();
     }
+
     public ValidationResult(boolean valid, List<String> errors) {
         this.valid = valid;
         this.errors = errors;
     }
+
     public boolean isValid() {
         return valid;
     }
+
     public void setValid(boolean valid) {
         this.valid = valid;
     }
@@ -36,10 +39,12 @@ public class ValidationResult {
     public Map<String, List<DuplicateValue>> getDuplicates() {
         return duplicates;
     }
-     public void addDuplicate(String key, DuplicateValue info) {
+
+    public void addDuplicate(String key, DuplicateValue info) {
         duplicates.computeIfAbsent(key, k -> new ArrayList<>()).add(info);
         this.valid = false;
     }
+
     public void merge(ValidationResult o) {
         if (!o.isValid()) {
             this.valid = false;
