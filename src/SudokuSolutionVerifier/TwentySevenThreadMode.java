@@ -15,11 +15,6 @@ public class TwentySevenThreadMode implements SudokuMode {
 
     @Override
     public ValidationResult verify(int[][] board) {
-        return null;
-    }
-
-    @Override
-    public ValidationResult run() {
         List<String> errors = Collections.synchronizedList(new ArrayList<>());
         List<Thread> threads = new ArrayList<>();
 
