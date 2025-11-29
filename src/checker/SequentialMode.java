@@ -14,7 +14,7 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
         this.board = b;
     }
 
-    @Override
+    
     public List<String> validate() {
         if (this.board == null) {
             return java.util.Collections.singletonList("Board not set");
