@@ -42,5 +42,13 @@ public class TwentySevenThreadMode implements SudokuMode {
             t.start();
         }
 
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
