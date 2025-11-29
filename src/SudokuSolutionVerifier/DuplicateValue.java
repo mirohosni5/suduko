@@ -26,5 +26,9 @@ public class DuplicateValue {
     public List<Integer> getPositions() {
         return positions;
     }
+     @Override
+    public String toString(){
+          return positions.toString();
+    }
     
 }
