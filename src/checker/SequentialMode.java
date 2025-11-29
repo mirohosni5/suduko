@@ -3,6 +3,7 @@ package checker;
 import java.util.ArrayList;
 import java.util.List;
 import SudokuSolutionVerifier.SudokuMode;   // IMPORTANT import
+import SudokuSolutionVerifier.ValidationResult;
 
 public class SequentialMode extends BasicChecks implements SudokuMode {
 
@@ -31,5 +32,10 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
                 System.out.println(e);
             }
         }
+    }
+
+    @Override
+    public ValidationResult verify(int[][] board) {
+        return null;
     }
 }
