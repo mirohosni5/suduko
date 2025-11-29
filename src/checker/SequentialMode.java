@@ -1,6 +1,6 @@
 package checker;
 
-package mode0;
+
 
 import java.util.List;
 
