@@ -1,5 +1,6 @@
 package SudokuSolutionVerifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SingleColumnThread implements Runnable {
@@ -15,6 +16,19 @@ public class SingleColumnThread implements Runnable {
 
     @Override
     public void run() {
+        int[] freq = new int[10];
+        List<Integer> duplicates = new ArrayList<>();
 
+        for (int i = 0; i < 9; i++) {
+            int num = board[i][colIndex];
+            freq[num]++;
+            if (freq[num] == 2) duplicates.add(num);
+        }
+
+        if (!duplicates.isEmpty()) {
+            synchronized (errors) {
+                errors.add("COL " + (colIndex + 1) + ", duplicates: " + duplicates);
+            }
+        }
     }
 }
