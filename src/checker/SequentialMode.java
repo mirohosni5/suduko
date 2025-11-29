@@ -38,12 +38,12 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
 
     @Override
     public ValidationResult verify(int[][] board) {
-        // set board, run validation and return a ValidationResult
+        
         setBoard(board);
         List<String> errors = validate();
         boolean valid = errors.isEmpty();
 
-        // Assumes ValidationResult has a constructor ValidationResult(boolean, List<String>)
+        
         return new ValidationResult(valid, errors);
     }
 }
