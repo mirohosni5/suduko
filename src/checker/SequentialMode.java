@@ -1,12 +1,13 @@
-package checker;
+ppackage checker;
 
 import java.util.ArrayList;
 import java.util.List;
+import SudokuSolutionVerifier.SudokuMode;   // IMPORTANT import
 
-public class SequentialMode extends BasicChecks {
+public class SequentialMode extends BasicChecks implements SudokuMode {
 
     public SequentialMode() {
-        super(null);   // we will set the board later using setBoard()
+        super(null);
     }
 
     public void setBoard(int[][] b) {
@@ -15,9 +16,10 @@ public class SequentialMode extends BasicChecks {
 
     @Override
     public List<String> validate() {
-        return checkAll();
+        return checkAll();   // from BasicChecks
     }
 
+    @Override
     public void printResult() {
         List<String> errors = validate();
 
