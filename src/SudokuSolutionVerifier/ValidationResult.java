@@ -21,14 +21,9 @@ public class ValidationResult {
         this.valid = true;
         this.duplicates = new ConcurrentHashMap<>();
     }
-
-    public ValidationResult(boolean valid, List<String> errors) {
-    }
-
     public boolean isValid() {
         return valid;
     }
-
     public void setValid(boolean valid) {
         this.valid = valid;
     }
