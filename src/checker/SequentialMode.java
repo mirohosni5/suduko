@@ -1,8 +1,7 @@
 package checker;
 
-import java.util.ArrayList;
 import java.util.List;
-import SudokuSolutionVerifier.SudokuMode;   // IMPORTANT import
+import SudokuSolutionVerifier.SudokuMode;
 import SudokuSolutionVerifier.ValidationResult;
 
 public class SequentialMode extends BasicChecks implements SudokuMode {
@@ -17,7 +16,10 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
 
     @Override
     public List<String> validate() {
-        return checkAll();   // from BasicChecks
+        if (this.board == null) {
+            return java.util.Collections.singletonList("Board not set");
+        }
+        return checkAll();
     }
 
     @Override
@@ -36,6 +38,12 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
 
     @Override
     public ValidationResult verify(int[][] board) {
-        return null;
+        // set board, run validation and return a ValidationResult
+        setBoard(board);
+        List<String> errors = validate();
+        boolean valid = errors.isEmpty();
+
+        // Assumes ValidationResult has a constructor ValidationResult(boolean, List<String>)
+        return new ValidationResult(valid, errors);
     }
 }
