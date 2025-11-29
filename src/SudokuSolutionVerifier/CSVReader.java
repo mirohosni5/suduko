@@ -16,7 +16,7 @@ import java.io.IOException;
 public class CSVReader {
     private static CSVReader reader;
 
-    public CSVReader() {
+    private CSVReader() {
     }
     public static CSVReader getInstance() {
         if (reader == null) {
