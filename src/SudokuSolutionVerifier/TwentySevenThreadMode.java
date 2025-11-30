@@ -5,48 +5,50 @@ import java.util.*;
 public class TwentySevenThreadMode implements SudokuMode {
 
     public ValidationResult verify(int[][] board) {
-        List<String> rowErr = Collections.synchronizedList(new ArrayList<>());
-        List<String> colErr = Collections.synchronizedList(new ArrayList<>());
-        List<String> boxErr = Collections.synchronizedList(new ArrayList<>());
+        List<DuplicateValue> rowDups = Collections.synchronizedList(new ArrayList<>());
+        List<DuplicateValue> colDups = Collections.synchronizedList(new ArrayList<>());
+        List<DuplicateValue> boxDups = Collections.synchronizedList(new ArrayList<>());
 
-        Thread[] r = new Thread[9];
-        Thread[] c = new Thread[9];
-        Thread[] b = new Thread[9];
+        // Use BasicChecks to get all duplicates, then filter by index in parallel threads.
+        // Each worker will extract the duplicates relevant to its index and add them to shared lists.
+        Thread[] rts = new Thread[9];
+        Thread[] cts = new Thread[9];
+        Thread[] bts = new Thread[9];
+
+        List<DuplicateValue> allRow = new BasicChecks(board).checkRowsDup();
+        List<DuplicateValue> allCol = new BasicChecks(board).checkColsDup();
+        List<DuplicateValue> allBox = new BasicChecks(board).checkBoxesDup();
 
         for (int i = 0; i < 9; i++) {
-            final int idx = i;
-
-            r[i] = new Thread(() -> {
-                for (String s : new BasicChecks(board).checkRows())
-                    if (s.startsWith("ROW " + (idx + 1) + ",")) rowErr.add(s);
+            final int idx = i + 1;
+            rts[i] = new Thread(() -> {
+                for (DuplicateValue dv : allRow) if (dv.getIndex() == idx) rowDups.add(dv);
             });
-
-            c[i] = new Thread(() -> {
-                for (String s : new BasicChecks(board).checkCols())
-                    if (s.startsWith("COL " + (idx + 1) + ",")) colErr.add(s);
+            cts[i] = new Thread(() -> {
+                for (DuplicateValue dv : allCol) if (dv.getIndex() == idx) colDups.add(dv);
             });
-
-            final int boxIndex = i + 1;
-            b[i] = new Thread(() -> {
-                for (String s : new BasicChecks(board).checkBoxes())
-                    if (s.startsWith("BOX " + boxIndex + ",")) boxErr.add(s);
+            final int bidx = i + 1;
+            bts[i] = new Thread(() -> {
+                for (DuplicateValue dv : allBox) if (dv.getIndex() == bidx) boxDups.add(dv);
             });
         }
 
         for (int i = 0; i < 9; i++) {
-            r[i].start();
-            c[i].start();
-            b[i].start();
+            rts[i].start();
+            cts[i].start();
+            bts[i].start();
         }
 
         try {
             for (int i = 0; i < 9; i++) {
-                r[i].join();
-                c[i].join();
-                b[i].join();
+                rts[i].join();
+                cts[i].join();
+                bts[i].join();
             }
-        } catch (Exception e) {}
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-        return new ValidationResult(rowErr, colErr, boxErr);
+        return new ValidationResult(rowDups, colDups, boxDups);
     }
 }
