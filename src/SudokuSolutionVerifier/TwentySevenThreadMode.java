@@ -9,41 +9,38 @@ public class TwentySevenThreadMode implements SudokuMode {
         List<DuplicateValue> colDups = Collections.synchronizedList(new ArrayList<>());
         List<DuplicateValue> boxDups = Collections.synchronizedList(new ArrayList<>());
 
-        // Use BasicChecks to get all duplicates, then filter by index in parallel threads.
-        // Each worker will extract the duplicates relevant to its index and add them to shared lists.
-        Thread[] rts = new Thread[9];
-        Thread[] cts = new Thread[9];
-        Thread[] bts = new Thread[9];
+        List<DuplicateValue> allRows = new BasicChecks(board).checkRowsDup();
+        List<DuplicateValue> allCols = new BasicChecks(board).checkColsDup();
+        List<DuplicateValue> allBoxes = new BasicChecks(board).checkBoxesDup();
 
-        List<DuplicateValue> allRow = new BasicChecks(board).checkRowsDup();
-        List<DuplicateValue> allCol = new BasicChecks(board).checkColsDup();
-        List<DuplicateValue> allBox = new BasicChecks(board).checkBoxesDup();
+        Thread[] rthreads = new Thread[9];
+        Thread[] cthreads = new Thread[9];
+        Thread[] bthreads = new Thread[9];
 
         for (int i = 0; i < 9; i++) {
             final int idx = i + 1;
-            rts[i] = new Thread(() -> {
-                for (DuplicateValue dv : allRow) if (dv.getIndex() == idx) rowDups.add(dv);
+            rthreads[i] = new Thread(() -> {
+                for (DuplicateValue dv : allRows) if (dv.getIndex() == idx) rowDups.add(dv);
             });
-            cts[i] = new Thread(() -> {
-                for (DuplicateValue dv : allCol) if (dv.getIndex() == idx) colDups.add(dv);
+            cthreads[i] = new Thread(() -> {
+                for (DuplicateValue dv : allCols) if (dv.getIndex() == idx) colDups.add(dv);
             });
-            final int bidx = i + 1;
-            bts[i] = new Thread(() -> {
-                for (DuplicateValue dv : allBox) if (dv.getIndex() == bidx) boxDups.add(dv);
+            bthreads[i] = new Thread(() -> {
+                for (DuplicateValue dv : allBoxes) if (dv.getIndex() == idx) boxDups.add(dv);
             });
         }
 
         for (int i = 0; i < 9; i++) {
-            rts[i].start();
-            cts[i].start();
-            bts[i].start();
+            rthreads[i].start();
+            cthreads[i].start();
+            bthreads[i].start();
         }
 
         try {
             for (int i = 0; i < 9; i++) {
-                rts[i].join();
-                cts[i].join();
-                bts[i].join();
+                rthreads[i].join();
+                cthreads[i].join();
+                bthreads[i].join();
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
