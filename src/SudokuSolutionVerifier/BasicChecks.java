@@ -1,81 +1,64 @@
 package SudokuSolutionVerifier;
 
-import java.util.*;
+public class SudokuVerifier {
 
-public class BasicChecks {
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Use: java -jar SudokuVerifier.jar <csv> <mode>");
+            return;
+        }
 
-    protected int[][] grid;
+        String first = args[0];
+        String second = args[1];
 
-    public BasicChecks(int[][] g) {
-        this.grid = g;
-    }
+        String csvPath;
+        int mode;
 
-    public List<String> checkRows() {
-        List<String> out = new ArrayList<>();
-        if (grid == null) return out;
+        // If first arg looks like an int and second looks like a path, accept mode-first.
+        // Otherwise assume csv-first (this matches the instructor's bonus: csv then mode).
+        int maybeMode = -1;
+        try {
+            maybeMode = Integer.parseInt(first);
+        } catch (Exception ex) {
+            maybeMode = -1;
+        }
 
-        for (int r = 0; r < 9; r++) {
-            Map<Integer, List<Integer>> m = new LinkedHashMap<>();
-            for (int c = 0; c < 9; c++) {
-                int v = grid[r][c];
-                if (v <= 0 || v > 9) continue;
-                m.computeIfAbsent(v, k -> new ArrayList<>()).add(c + 1);
-            }
-            for (var e : m.entrySet()) {
-                if (e.getValue().size() > 1) out.add("ROW " + (r + 1) + ", #" + e.getKey() + ", " + e.getValue());
+        if (maybeMode == 0 || maybeMode == 3 || maybeMode == 27) {
+            mode = maybeMode;
+            csvPath = second;
+        } else {
+            // try parse second as mode (csv-first case)
+            try {
+                mode = Integer.parseInt(second);
+                csvPath = first;
+            } catch (Exception ex) {
+                System.out.println("Invalid mode. Use 0, 3, or 27");
+                return;
             }
         }
-        return out;
-    }
 
-    public List<String> checkCols() {
-        List<String> out = new ArrayList<>();
-        if (grid == null) return out;
-
-        for (int c = 0; c < 9; c++) {
-            Map<Integer, List<Integer>> m = new LinkedHashMap<>();
-            for (int r = 0; r < 9; r++) {
-                int v = grid[r][c];
-                if (v <= 0 || v > 9) continue;
-                m.computeIfAbsent(v, k -> new ArrayList<>()).add(r + 1);
-            }
-            for (var e : m.entrySet()) {
-                if (e.getValue().size() > 1) out.add("COL " + (c + 1) + ", #" + e.getKey() + ", " + e.getValue());
-            }
+        if (mode != 0 && mode != 3 && mode != 27) {
+            System.out.println("Invalid mode. Use 0, 3, or 27");
+            return;
         }
-        return out;
-    }
 
-    public List<String> checkBoxes() {
-        List<String> out = new ArrayList<>();
-        if (grid == null) return out;
-
-        for (int br = 0; br < 3; br++) {
-            for (int bc = 0; bc < 3; bc++) {
-                Map<Integer, List<Integer>> m = new LinkedHashMap<>();
-                int pos = 0;
-                for (int r = br * 3; r < br * 3 + 3; r++) {
-                    for (int c = bc * 3; c < bc * 3 + 3; c++) {
-                        pos++;
-                        int v = grid[r][c];
-                        if (v <= 0 || v > 9) continue;
-                        m.computeIfAbsent(v, k -> new ArrayList<>()).add(pos);
-                    }
-                }
-                int boxIndex = br * 3 + bc + 1;
-                for (var e : m.entrySet()) {
-                    if (e.getValue().size() > 1) out.add("BOX " + boxIndex + ", #" + e.getKey() + ", " + e.getValue());
-                }
-            }
+        int[][] board;
+        try {
+            board = CSVReader.load(csvPath);
+        } catch (Exception e) {
+            System.out.println("Error reading file");
+            return;
         }
-        return out;
-    }
 
-    public List<String> allChecks() {
-        List<String> a = new ArrayList<>();
-        a.addAll(checkRows());
-        a.addAll(checkCols());
-        a.addAll(checkBoxes());
-        return a;
+        SudokuMode sm;
+        try {
+            sm = ModesFactory.create(mode);
+        } catch (Exception e) {
+            System.out.println("Invalid mode");
+            return;
+        }
+
+        ValidationResult result = sm.verify(board);
+        ResultPrinter.get().print(result);
     }
 }
