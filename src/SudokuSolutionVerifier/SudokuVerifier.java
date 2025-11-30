@@ -8,12 +8,19 @@ public class SudokuVerifier {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: java SudokuSolutionVerifier.SudokuVerifier <csv> <mode>");
+            System.out.println("Usage: java SudokuVerifier <mode> <csv>");
             return;
         }
 
-        String file = args[0];
-        int mode = Integer.parseInt(args[1]);
+        int mode;
+        try {
+            mode = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            System.out.println("Invalid mode");
+            return;
+        }
+
+        String file = args[1];
 
         int[][] board;
         try {
