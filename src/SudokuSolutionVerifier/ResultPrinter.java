@@ -26,7 +26,7 @@ public class ResultPrinter {
             return;
         }
 
-        System.out.println("INVALID");
+        System.out.println("Invalid");
         for (String s : r.getRows()) System.out.println(s);
         System.out.println("------------------------------------------");
         for (String s : r.getCols()) System.out.println(s);
