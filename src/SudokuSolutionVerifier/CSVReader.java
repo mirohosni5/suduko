@@ -12,12 +12,11 @@ public class CSVReader {
     public static int[][] load(String path) throws Exception {
         int[][] board = new int[9][9];
         String data = new String(Files.readAllBytes(Paths.get(path)));
-        String[] t = data.split("[,\\n\\r]+");
-
-        int n = Math.min(81, t.length);
+        String[] tokens = data.split("[,\\n\\r]+");
+        int n = Math.min(81, tokens.length);
         for (int i = 0; i < n; i++) {
             try {
-                board[i / 9][i % 9] = Integer.parseInt(t[i].trim());
+                board[i / 9][i % 9] = Integer.parseInt(tokens[i].trim());
             } catch (Exception e) {
                 board[i / 9][i % 9] = 0;
             }
