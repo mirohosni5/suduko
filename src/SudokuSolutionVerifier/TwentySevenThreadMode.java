@@ -1,5 +1,7 @@
 package SudokuSolutionVerifier;
 
+import checker.BasicChecks;
+
 import java.util.*;
 
 public class TwentySevenThreadMode implements SudokuMode {
@@ -15,36 +17,12 @@ public class TwentySevenThreadMode implements SudokuMode {
 
     @Override
     public ValidationResult verify(int[][] board) {
-        List<String> errors = Collections.synchronizedList(new ArrayList<>());
-        List<Thread> threads = new ArrayList<>();
+        BasicChecks checker = new BasicChecks(board);
 
-        // 9 Row threads
-        for (int i = 0; i < 9; i++) {
-            Thread t = new Thread(new SingleRowThread(i, board, errors));
-            threads.add(t);
-            t.start();
-        }
-        // 9 Column threads
-        for (int i = 0; i < 9; i++) {
-            Thread t = new Thread(new SingleColumnThread(i, board, errors));
-            threads.add(t);
-            t.start();
-        }
-        // 9 Box threads
-        for (int i = 0; i < 9; i++) {
-            Thread t = new Thread(new SingleBoxThread(i, board, errors));
-            threads.add(t);
-            t.start();
-        }
+        // Performs all checks (rows + columns + boxes)
+        List<String> errors = checker.checkAll();
 
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
+        // Build the result object
         boolean isValid = errors.isEmpty();
         return new ValidationResult(isValid, errors);
     }
