@@ -10,24 +10,32 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ThreeThreadMode implements SudokuMode {
 
     public ValidationResult verify(int[][] board) {
-        AtomicReference<List<String>> r = new AtomicReference<>();
-        AtomicReference<List<String>> c = new AtomicReference<>();
-        AtomicReference<List<String>> b = new AtomicReference<>();
+        AtomicReference<List<DuplicateValue>> rr = new AtomicReference<>();
+        AtomicReference<List<DuplicateValue>> cr = new AtomicReference<>();
+        AtomicReference<List<DuplicateValue>> br = new AtomicReference<>();
 
-        Thread t1 = new Thread(() -> r.set(new BasicChecks(board).checkRows()));
-        Thread t2 = new Thread(() -> c.set(new BasicChecks(board).checkCols()));
-        Thread t3 = new Thread(() -> b.set(new BasicChecks(board).checkBoxes()));
+        Thread tr = new Thread(() -> rr.set(new BasicChecks(board).checkRowsDup()));
+        Thread tc = new Thread(() -> cr.set(new BasicChecks(board).checkColsDup()));
+        Thread tb = new Thread(() -> br.set(new BasicChecks(board).checkBoxesDup()));
 
-        t1.start();
-        t2.start();
-        t3.start();
+        tr.start();
+        tc.start();
+        tb.start();
 
         try {
-            t1.join();
-            t2.join();
-            t3.join();
-        } catch (Exception e) {}
+            tr.join();
+            tc.join();
+            tb.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-        return new ValidationResult(r.get(), c.get(), b.get());
+        List<DuplicateValue> rows = rr.get();
+        List<DuplicateValue> cols = cr.get();
+        List<DuplicateValue> boxes = br.get();
+        if (rows == null) rows = new ArrayList<>();
+        if (cols == null) cols = new ArrayList<>();
+        if (boxes == null) boxes = new ArrayList<>();
+        return new ValidationResult(rows, cols, boxes);
     }
 }
