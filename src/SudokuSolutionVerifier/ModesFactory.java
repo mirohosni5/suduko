@@ -4,7 +4,7 @@
  */
 package SudokuSolutionVerifier;
 
-package SudokuSolutionVerifier;
+
 
 public class ModesFactory {
 
