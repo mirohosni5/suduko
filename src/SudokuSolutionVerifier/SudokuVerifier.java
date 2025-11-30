@@ -58,7 +58,7 @@ public class SudokuVerifier {
         try {
             sm = ModesFactory.create(mode);
         } catch (Exception e) {
-            System.out.println("Invalid mode");
+            System.out.println("Invalid");
             return;
         }
 
