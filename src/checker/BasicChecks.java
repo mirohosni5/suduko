@@ -1,7 +1,6 @@
 package checker;
 
 
-
 import java.util.*;
 
 public class BasicChecks {

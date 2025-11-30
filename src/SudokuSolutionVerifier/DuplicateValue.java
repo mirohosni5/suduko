@@ -11,7 +11,7 @@ import java.util.List;
  * @author M
  */
 public class DuplicateValue {
-     private int value;
+    private int value;
     private List<Integer> positions;
 
     public DuplicateValue(int value, List<Integer> positions) {
@@ -26,9 +26,10 @@ public class DuplicateValue {
     public List<Integer> getPositions() {
         return positions;
     }
-     @Override
-    public String toString(){
-          return positions.toString();
+
+    @Override
+    public String toString() {
+        return positions.toString();
     }
-    
+
 }
