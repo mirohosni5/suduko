@@ -43,7 +43,7 @@ public class SequentialMode extends BasicChecks implements SudokuMode {
         List<String> errors = validate();
         boolean valid = errors.isEmpty();
 
-        
+
         return new ValidationResult(valid, errors);
     }
 }
