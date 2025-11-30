@@ -13,6 +13,7 @@ public class BasicChecks {
     public List<String> checkRows() {
         List<String> out = new ArrayList<>();
         if (grid == null) return out;
+
         for (int r = 0; r < 9; r++) {
             Map<Integer, List<Integer>> m = new LinkedHashMap<>();
             for (int c = 0; c < 9; c++) {
@@ -20,7 +21,7 @@ public class BasicChecks {
                 if (v <= 0 || v > 9) continue;
                 m.computeIfAbsent(v, k -> new ArrayList<>()).add(c + 1);
             }
-            for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
+            for (var e : m.entrySet()) {
                 if (e.getValue().size() > 1) out.add("ROW " + (r + 1) + ", #" + e.getKey() + ", " + e.getValue());
             }
         }
@@ -30,6 +31,7 @@ public class BasicChecks {
     public List<String> checkCols() {
         List<String> out = new ArrayList<>();
         if (grid == null) return out;
+
         for (int c = 0; c < 9; c++) {
             Map<Integer, List<Integer>> m = new LinkedHashMap<>();
             for (int r = 0; r < 9; r++) {
@@ -37,7 +39,7 @@ public class BasicChecks {
                 if (v <= 0 || v > 9) continue;
                 m.computeIfAbsent(v, k -> new ArrayList<>()).add(r + 1);
             }
-            for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
+            for (var e : m.entrySet()) {
                 if (e.getValue().size() > 1) out.add("COL " + (c + 1) + ", #" + e.getKey() + ", " + e.getValue());
             }
         }
@@ -47,6 +49,7 @@ public class BasicChecks {
     public List<String> checkBoxes() {
         List<String> out = new ArrayList<>();
         if (grid == null) return out;
+
         for (int br = 0; br < 3; br++) {
             for (int bc = 0; bc < 3; bc++) {
                 Map<Integer, List<Integer>> m = new LinkedHashMap<>();
@@ -59,8 +62,9 @@ public class BasicChecks {
                         m.computeIfAbsent(v, k -> new ArrayList<>()).add(pos);
                     }
                 }
-                for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
-                    if (e.getValue().size() > 1) out.add("BOX " + (br * 3 + bc + 1) + ", #" + e.getKey() + ", " + e.getValue());
+                int boxIndex = br * 3 + bc + 1;
+                for (var e : m.entrySet()) {
+                    if (e.getValue().size() > 1) out.add("BOX " + boxIndex + ", #" + e.getKey() + ", " + e.getValue());
                 }
             }
         }
