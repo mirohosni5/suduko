@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ValidationResult {
     private boolean valid;
     private Map<String, List<DuplicateValue>> duplicates;
+    public List<String> errors;
 
     public ValidationResult() {
         this.valid = true;
@@ -23,6 +24,8 @@ public class ValidationResult {
     }
 
     public ValidationResult(boolean valid, List<String> errors) {
+        this.valid = valid;
+        this.errors = errors;
     }
 
     public boolean isValid() {
@@ -36,10 +39,12 @@ public class ValidationResult {
     public Map<String, List<DuplicateValue>> getDuplicates() {
         return duplicates;
     }
-     public void addDuplicate(String key, DuplicateValue info) {
+
+    public void addDuplicate(String key, DuplicateValue info) {
         duplicates.computeIfAbsent(key, k -> new ArrayList<>()).add(info);
         this.valid = false;
     }
+
     public void merge(ValidationResult o) {
         if (!o.isValid()) {
             this.valid = false;

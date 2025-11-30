@@ -9,15 +9,15 @@ package SudokuSolutionVerifier;
  * @author M
  */
 public class ResultPrinter {
-     private static ResultPrinter instance;
+     private static ResultPrinter resultPrinter;
 
     private ResultPrinter() {}
 
     public static ResultPrinter getInstance() {
-        if (instance == null) {
-            instance = new ResultPrinter();
+        if (resultPrinter == null) {
+            resultPrinter = new ResultPrinter();
         }
-        return instance;
+        return resultPrinter;
     }
     public void printResult(ValidationResult result) {
         if (result.isValid()) {
@@ -29,12 +29,13 @@ public class ResultPrinter {
                 if (result.getDuplicates().containsKey(key)) {
                     for (DuplicateValue info : result.getDuplicates().get(key)) {
                         System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
-           
+            System.out.println("------------------------------------------");
          for (int i = 1; i <= 9; i++) {
                 String key = "COL " + i;
                 if (result.getDuplicates().containsKey(key)) {
                     for (DuplicateValue info : result.getDuplicates().get(key)) {
                         System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
+         System.out.println("------------------------------------------");
          for (int i = 1; i <= 9; i++) {
                 String key = "BOX " + i;
                 if (result.getDuplicates().containsKey(key)) {
