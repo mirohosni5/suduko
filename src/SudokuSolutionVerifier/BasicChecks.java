@@ -1,106 +1,77 @@
 package SudokuSolutionVerifier;
 
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BasicChecks {
 
-    protected int[][] board;
+    protected int[][] grid;
 
-    public BasicChecks(int[][] board) {
-        this.board = board;
+    public BasicChecks(int[][] g) {
+        this.grid = g;
     }
 
     public List<String> checkRows() {
-        List<String> errors = new ArrayList<>();
-
+        List<String> out = new ArrayList<>();
+        if (grid == null) return out;
         for (int r = 0; r < 9; r++) {
-            ArrayList<Integer> numbers = new ArrayList<>();
-
+            Map<Integer, List<Integer>> m = new LinkedHashMap<>();
             for (int c = 0; c < 9; c++) {
-                int v = board[r][c];
-
-                if (v == 0) continue;
-                if (v < 1 || v > 9) {
-                    errors.add("Row " + (r + 1) + " has a wrong number (" + v + ")");
-                    continue;
-                }
-
-                if (numbers.contains(v)) {
-                    errors.add("Row " + (r + 1) + " repeats the number " + v);
-                } else {
-                    numbers.add(v);
-                }
+                int v = grid[r][c];
+                if (v <= 0 || v > 9) continue;
+                m.computeIfAbsent(v, k -> new ArrayList<>()).add(c + 1);
+            }
+            for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
+                if (e.getValue().size() > 1) out.add("ROW " + (r + 1) + ", #" + e.getKey() + ", " + e.getValue());
             }
         }
-
-        return errors;
+        return out;
     }
 
-    public List<String> checkColumns() {
-        List<String> errors = new ArrayList<>();
-
+    public List<String> checkCols() {
+        List<String> out = new ArrayList<>();
+        if (grid == null) return out;
         for (int c = 0; c < 9; c++) {
-            ArrayList<Integer> numbers = new ArrayList<>();
-
+            Map<Integer, List<Integer>> m = new LinkedHashMap<>();
             for (int r = 0; r < 9; r++) {
-                int v = board[r][c];
-
-                if (v == 0) continue;
-                if (v < 1 || v > 9) {
-                    errors.add("Column " + (c + 1) + " has a wrong number (" + v + ")");
-                    continue;
-                }
-
-                if (numbers.contains(v)) {
-                    errors.add("Column " + (c + 1) + " repeats the number " + v);
-                } else {
-                    numbers.add(v);
-                }
+                int v = grid[r][c];
+                if (v <= 0 || v > 9) continue;
+                m.computeIfAbsent(v, k -> new ArrayList<>()).add(r + 1);
+            }
+            for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
+                if (e.getValue().size() > 1) out.add("COL " + (c + 1) + ", #" + e.getKey() + ", " + e.getValue());
             }
         }
-
-        return errors;
+        return out;
     }
 
     public List<String> checkBoxes() {
-        List<String> errors = new ArrayList<>();
-
+        List<String> out = new ArrayList<>();
+        if (grid == null) return out;
         for (int br = 0; br < 3; br++) {
             for (int bc = 0; bc < 3; bc++) {
-
-                ArrayList<Integer> numbers = new ArrayList<>();
-
+                Map<Integer, List<Integer>> m = new LinkedHashMap<>();
+                int pos = 0;
                 for (int r = br * 3; r < br * 3 + 3; r++) {
                     for (int c = bc * 3; c < bc * 3 + 3; c++) {
-                        int v = board[r][c];
-
-                        if (v == 0) continue;
-                        if (v < 1 || v > 9) {
-                            errors.add("Box (" + (br + 1) + "," + (bc + 1) + ") has a wrong number (" + v + ")");
-                            continue;
-                        }
-
-                        if (numbers.contains(v)) {
-                            errors.add("Box (" + (br + 1) + "," + (bc + 1) + ") repeats the number " + v);
-                        } else {
-                            numbers.add(v);
-                        }
+                        pos++;
+                        int v = grid[r][c];
+                        if (v <= 0 || v > 9) continue;
+                        m.computeIfAbsent(v, k -> new ArrayList<>()).add(pos);
                     }
+                }
+                for (Map.Entry<Integer, List<Integer>> e : m.entrySet()) {
+                    if (e.getValue().size() > 1) out.add("BOX " + (br * 3 + bc + 1) + ", #" + e.getKey() + ", " + e.getValue());
                 }
             }
         }
-
-        return errors;
+        return out;
     }
 
-    public List<String> checkAll() {
-        List<String> all = new ArrayList<>();
-        all.addAll(checkRows());
-        all.addAll(checkColumns());
-        all.addAll(checkBoxes());
-        return all;
+    public List<String> allChecks() {
+        List<String> a = new ArrayList<>();
+        a.addAll(checkRows());
+        a.addAll(checkCols());
+        a.addAll(checkBoxes());
+        return a;
     }
 }
-
