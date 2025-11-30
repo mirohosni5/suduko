@@ -16,7 +16,7 @@ public class SudokuVerifier {
         try {
             mode = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            System.out.println("Invalid mode");
+            System.out.println("Invalid");
             return;
         }
 
