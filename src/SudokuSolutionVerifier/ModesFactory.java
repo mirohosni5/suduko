@@ -4,8 +4,6 @@
  */
 package SudokuSolutionVerifier;
 
-
-
 public class ModesFactory {
 
     public static SudokuMode create(int m) {
