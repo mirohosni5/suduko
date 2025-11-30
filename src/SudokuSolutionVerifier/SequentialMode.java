@@ -6,9 +6,9 @@ public class SequentialMode implements SudokuMode {
 
     public ValidationResult verify(int[][] board) {
         BasicChecks ck = new BasicChecks(board);
-        List<DuplicateValue> r = ck.checkRowsDup();
-        List<DuplicateValue> c = ck.checkColsDup();
-        List<DuplicateValue> b = ck.checkBoxesDup();
-        return new ValidationResult(r, c, b);
+        List<DuplicateValue> rd = ck.checkRowsDup();
+        List<DuplicateValue> cd = ck.checkColsDup();
+        List<DuplicateValue> bd = ck.checkBoxesDup();
+        return new ValidationResult(rd, cd, bd);
     }
 }
