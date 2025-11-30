@@ -4,81 +4,30 @@
  */
 package SudokuSolutionVerifier;
 
-import checker.BasicChecks;
-
-import java.util.concurrent.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
-/**
- *
- * @author Engyz
- */
-//
+public class ThreeThreadMode implements SudokuMode {
 
+    public ValidationResult verify(int[][] board) {
+        AtomicReference<List<String>> r = new AtomicReference<>();
+        AtomicReference<List<String>> c = new AtomicReference<>();
+        AtomicReference<List<String>> b = new AtomicReference<>();
 
-public class ThreeThreadMode extends BasicChecks implements SudokuMode {
+        Thread t1 = new Thread(() -> r.set(new BasicChecks(board).checkRows()));
+        Thread t2 = new Thread(() -> c.set(new BasicChecks(board).checkCols()));
+        Thread t3 = new Thread(() -> b.set(new BasicChecks(board).checkBoxes()));
 
-    public ThreeThreadMode(int[][] board) {
-        super(board);
-    }
+        t1.start();
+        t2.start();
+        t3.start();
 
-    public ThreeThreadMode() {
-        super(null);
-    }
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (Exception e) {}
 
-    public ValidationResult verify(int[][] boardIgnored) {
-
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-        List<Future<ValidationResult>> futures = new ArrayList<>();
-
-
-        futures.add(executor.submit(() -> {
-            ValidationResult result = new ValidationResult();
-            for (String err : checkRows()) {
-                result.addDuplicate(
-                        "Row",
-                        new DuplicateValue(-1, List.of())
-                );
-            }
-            return result;
-        }));
-
-
-        futures.add(executor.submit(() -> {
-            ValidationResult result = new ValidationResult();
-            for (String err : checkColumns()) {
-                result.addDuplicate(
-                        "Column",
-                        new DuplicateValue(-1, List.of())
-                );
-            }
-            return result;
-        }));
-
-
-        futures.add(executor.submit(() -> {
-            ValidationResult result = new ValidationResult();
-            for (String err : checkBoxes()) {
-                result.addDuplicate(
-                        "Box",
-                        new DuplicateValue(-1, List.of())
-                );
-            }
-            return result;
-        }));
-
-        ValidationResult finalResult = new ValidationResult();
-        for (Future<ValidationResult> future : futures) {
-            try {
-                finalResult.merge(future.get());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        executor.shutdown();
-        return finalResult;
+        return new ValidationResult(r.get(), c.get(), b.get());
     }
 }
-
-
