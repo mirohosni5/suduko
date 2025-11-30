@@ -1,26 +1,52 @@
 package SudokuSolutionVerifier;
 
-import checker.BasicChecks;
-
 import java.util.*;
 
 public class TwentySevenThreadMode implements SudokuMode {
-    private int[][] board;
 
-    public TwentySevenThreadMode(int[][] board) {
-        this.board = board;
-    }
-
-    public TwentySevenThreadMode() {
-        super();
-    }
-
-    @Override
     public ValidationResult verify(int[][] board) {
-        BasicChecks checker = new BasicChecks(board);
-        List<String> errors = checker.checkAll();
+        List<String> rowErr = Collections.synchronizedList(new ArrayList<>());
+        List<String> colErr = Collections.synchronizedList(new ArrayList<>());
+        List<String> boxErr = Collections.synchronizedList(new ArrayList<>());
 
-        boolean isValid = errors.isEmpty();
-        return new ValidationResult(isValid, errors);
+        Thread[] r = new Thread[9];
+        Thread[] c = new Thread[9];
+        Thread[] b = new Thread[9];
+
+        for (int i = 0; i < 9; i++) {
+            final int idx = i;
+
+            r[i] = new Thread(() -> {
+                for (String s : new BasicChecks(board).checkRows())
+                    if (s.startsWith("ROW " + (idx + 1) + ",")) rowErr.add(s);
+            });
+
+            c[i] = new Thread(() -> {
+                for (String s : new BasicChecks(board).checkCols())
+                    if (s.startsWith("COL " + (idx + 1) + ",")) colErr.add(s);
+            });
+
+            final int boxIndex = i + 1;
+            b[i] = new Thread(() -> {
+                for (String s : new BasicChecks(board).checkBoxes())
+                    if (s.startsWith("BOX " + boxIndex + ",")) boxErr.add(s);
+            });
+        }
+
+        for (int i = 0; i < 9; i++) {
+            r[i].start();
+            c[i].start();
+            b[i].start();
+        }
+
+        try {
+            for (int i = 0; i < 9; i++) {
+                r[i].join();
+                c[i].join();
+                b[i].join();
+            }
+        } catch (Exception e) {}
+
+        return new ValidationResult(rowErr, colErr, boxErr);
     }
 }
