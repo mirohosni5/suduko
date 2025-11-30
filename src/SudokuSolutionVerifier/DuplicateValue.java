@@ -7,11 +7,10 @@ package SudokuSolutionVerifier;
 import java.util.*;
 
 public class DuplicateValue {
-
+    private String kind; // "ROW", "COL", "BOX"
+    private int index;   // 1-based row/col/box index
     private int value;
     private List<Integer> positions;
-    private String kind; // "ROW", "COL", "BOX"
-    private int index;   // row number, col number, or box number (1-based)
 
     public DuplicateValue(String kind, int index, int value, List<Integer> positions) {
         this.kind = kind;
@@ -23,9 +22,9 @@ public class DuplicateValue {
     public String getKind() { return kind; }
     public int getIndex() { return index; }
     public int getValue() { return value; }
-    public List<Integer> getPositions() { return positions; }
+    public List<Integer> getPositions() { return Collections.unmodifiableList(positions); }
 
     public String toString() {
-        return kind + " " + index + ", #" + value + ", " + positions;
+        return kind + " " + index + ", #" + value + ", " + positions.toString();
     }
 }
