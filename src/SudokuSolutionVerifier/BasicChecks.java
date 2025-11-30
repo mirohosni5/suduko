@@ -10,7 +10,6 @@ public class BasicChecks {
         this.grid = g;
     }
 
-    // produce DuplicateValue objects for rows
     public List<DuplicateValue> checkRowsDup() {
         List<DuplicateValue> out = new ArrayList<>();
         if (grid == null) return out;
@@ -22,15 +21,12 @@ public class BasicChecks {
                 map.computeIfAbsent(v, k -> new ArrayList<>()).add(c + 1);
             }
             for (Map.Entry<Integer, List<Integer>> e : map.entrySet()) {
-                if (e.getValue().size() > 1) {
-                    out.add(new DuplicateValue("ROW", r + 1, e.getKey(), e.getValue()));
-                }
+                if (e.getValue().size() > 1) out.add(new DuplicateValue("ROW", r + 1, e.getKey(), e.getValue()));
             }
         }
         return out;
     }
 
-    // produce DuplicateValue objects for columns
     public List<DuplicateValue> checkColsDup() {
         List<DuplicateValue> out = new ArrayList<>();
         if (grid == null) return out;
@@ -42,15 +38,12 @@ public class BasicChecks {
                 map.computeIfAbsent(v, k -> new ArrayList<>()).add(r + 1);
             }
             for (Map.Entry<Integer, List<Integer>> e : map.entrySet()) {
-                if (e.getValue().size() > 1) {
-                    out.add(new DuplicateValue("COL", c + 1, e.getKey(), e.getValue()));
-                }
+                if (e.getValue().size() > 1) out.add(new DuplicateValue("COL", c + 1, e.getKey(), e.getValue()));
             }
         }
         return out;
     }
 
-    // produce DuplicateValue objects for boxes
     public List<DuplicateValue> checkBoxesDup() {
         List<DuplicateValue> out = new ArrayList<>();
         if (grid == null) return out;
@@ -68,39 +61,29 @@ public class BasicChecks {
                 }
                 int bindex = br * 3 + bc + 1;
                 for (Map.Entry<Integer, List<Integer>> e : map.entrySet()) {
-                    if (e.getValue().size() > 1) {
-                        out.add(new DuplicateValue("BOX", bindex, e.getKey(), e.getValue()));
-                    }
+                    if (e.getValue().size() > 1) out.add(new DuplicateValue("BOX", bindex, e.getKey(), e.getValue()));
                 }
             }
         }
         return out;
     }
 
-    // old methods (keeps compatibility) - build strings from DuplicateValue objects
+    // convenience methods (for any older code expecting strings)
     public List<String> checkRows() {
-        List<String> out = new ArrayList<>();
-        for (DuplicateValue dv : checkRowsDup()) out.add(dv.toString());
-        return out;
+        List<String> list = new ArrayList<>();
+        for (DuplicateValue dv : checkRowsDup()) list.add(dv.toString());
+        return list;
     }
 
     public List<String> checkCols() {
-        List<String> out = new ArrayList<>();
-        for (DuplicateValue dv : checkColsDup()) out.add(dv.toString());
-        return out;
+        List<String> list = new ArrayList<>();
+        for (DuplicateValue dv : checkColsDup()) list.add(dv.toString());
+        return list;
     }
 
     public List<String> checkBoxes() {
-        List<String> out = new ArrayList<>();
-        for (DuplicateValue dv : checkBoxesDup()) out.add(dv.toString());
-        return out;
-    }
-
-    public List<String> allChecks() {
-        List<String> a = new ArrayList<>();
-        a.addAll(checkRows());
-        a.addAll(checkCols());
-        a.addAll(checkBoxes());
-        return a;
+        List<String> list = new ArrayList<>();
+        for (DuplicateValue dv : checkBoxesDup()) list.add(dv.toString());
+        return list;
     }
 }
