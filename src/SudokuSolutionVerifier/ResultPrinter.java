@@ -1,4 +1,4 @@
-package SudokuSolutionVerifier;
+ppackage SudokuSolutionVerifier;
 
 public class ResultPrinter {
 
