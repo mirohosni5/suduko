@@ -12,33 +12,33 @@ public class ValidationResult {
     private List<DuplicateValue> colDups;
     private List<DuplicateValue> boxDups;
 
-    private List<String> rowLines;
-    private List<String> colLines;
-    private List<String> boxLines;
-
-    public ValidationResult(List<DuplicateValue> rdup, List<DuplicateValue> cdup, List<DuplicateValue> bdup) {
-        this.rowDups = rdup == null ? new ArrayList<>() : new ArrayList<>(rdup);
-        this.colDups = cdup == null ? new ArrayList<>() : new ArrayList<>(cdup);
-        this.boxDups = bdup == null ? new ArrayList<>() : new ArrayList<>(bdup);
-
-        this.rowLines = buildLines(rowDups);
-        this.colLines = buildLines(colDups);
-        this.boxLines = buildLines(boxDups);
-    }
-
-    private List<String> buildLines(List<DuplicateValue> list) {
-        List<String> out = new ArrayList<>();
-        for (DuplicateValue dv : list) out.add(dv.toString());
-        return out;
+    public ValidationResult(List<DuplicateValue> r, List<DuplicateValue> c, List<DuplicateValue> b) {
+        this.rowDups = r == null ? new ArrayList<>() : new ArrayList<>(r);
+        this.colDups = c == null ? new ArrayList<>() : new ArrayList<>(c);
+        this.boxDups = b == null ? new ArrayList<>() : new ArrayList<>(b);
     }
 
     public List<DuplicateValue> getRowDups() { return Collections.unmodifiableList(rowDups); }
     public List<DuplicateValue> getColDups() { return Collections.unmodifiableList(colDups); }
     public List<DuplicateValue> getBoxDups() { return Collections.unmodifiableList(boxDups); }
 
-    public List<String> getRows() { return rowLines; }
-    public List<String> getCols() { return colLines; }
-    public List<String> getBoxes() { return boxLines; }
+    public List<String> getRows() {
+        List<String> out = new ArrayList<>();
+        for (DuplicateValue dv : rowDups) out.add(dv.toString());
+        return out;
+    }
+
+    public List<String> getCols() {
+        List<String> out = new ArrayList<>();
+        for (DuplicateValue dv : colDups) out.add(dv.toString());
+        return out;
+    }
+
+    public List<String> getBoxes() {
+        List<String> out = new ArrayList<>();
+        for (DuplicateValue dv : boxDups) out.add(dv.toString());
+        return out;
+    }
 
     public boolean isValid() {
         return rowDups.isEmpty() && colDups.isEmpty() && boxDups.isEmpty();
