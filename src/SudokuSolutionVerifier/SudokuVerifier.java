@@ -50,7 +50,7 @@ public class SudokuVerifier {
         try {
             board = CSVReader.load(csvPath);
         } catch (Exception e) {
-            System.out.println("Error reading file");
+            System.out.println("cant read the file");
             return;
         }
 
