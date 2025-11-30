@@ -22,7 +22,7 @@ public class ResultPrinter {
         }
 
         if (r.isValid()) {
-            System.out.println("VALID");
+            System.out.println("valid");
             return;
         }
 
