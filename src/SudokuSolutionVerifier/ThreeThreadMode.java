@@ -14,28 +14,25 @@ public class ThreeThreadMode implements SudokuMode {
         AtomicReference<List<DuplicateValue>> cr = new AtomicReference<>();
         AtomicReference<List<DuplicateValue>> br = new AtomicReference<>();
 
-        Thread tr = new Thread(() -> rr.set(new BasicChecks(board).checkRowsDup()));
-        Thread tc = new Thread(() -> cr.set(new BasicChecks(board).checkColsDup()));
-        Thread tb = new Thread(() -> br.set(new BasicChecks(board).checkBoxesDup()));
+        Thread t1 = new Thread(() -> rr.set(new BasicChecks(board).checkRowsDup()));
+        Thread t2 = new Thread(() -> cr.set(new BasicChecks(board).checkColsDup()));
+        Thread t3 = new Thread(() -> br.set(new BasicChecks(board).checkBoxesDup()));
 
-        tr.start();
-        tc.start();
-        tb.start();
+        t1.start();
+        t2.start();
+        t3.start();
 
         try {
-            tr.join();
-            tc.join();
-            tb.join();
+            t1.join();
+            t2.join();
+            t3.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
-        List<DuplicateValue> rows = rr.get();
-        List<DuplicateValue> cols = cr.get();
-        List<DuplicateValue> boxes = br.get();
-        if (rows == null) rows = new ArrayList<>();
-        if (cols == null) cols = new ArrayList<>();
-        if (boxes == null) boxes = new ArrayList<>();
+        List<DuplicateValue> rows = rr.get(); if (rows == null) rows = new ArrayList<>();
+        List<DuplicateValue> cols = cr.get(); if (cols == null) cols = new ArrayList<>();
+        List<DuplicateValue> boxes = br.get(); if (boxes == null) boxes = new ArrayList<>();
         return new ValidationResult(rows, cols, boxes);
     }
 }
