@@ -8,61 +8,72 @@ public class SudokuVerifier {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("RUN the bonus part i think");
+            System.out.println("Run like: java -jar SudokuVerifier.jar <csv> <mode>");
             return;
         }
 
-        String first = args[0];
-        String second = args[1];
+        String a = args[0];
+        String b = args[1];
 
         String csvPath;
-        int mode;
+        int mode = -1;
 
-        // If first arg looks like an int and second looks like a path, accept mode-first.
-        // Otherwise assume csv-first (this matches the instructor's bonus: csv then mode).
-        int maybeMode = -1;
+        // try interpret first arg as mode
         try {
-            maybeMode = Integer.parseInt(first);
+            int maybe = Integer.parseInt(a);
+            if (maybe == 0 || maybe == 3 || maybe == 27) {
+                mode = maybe;
+                csvPath = b;
+            } else {
+                // try interpret second arg as mode (csv first)
+                try {
+                    int maybe2 = Integer.parseInt(b);
+                    if (maybe2 == 0 || maybe2 == 3 || maybe2 == 27) {
+                        mode = maybe2;
+                        csvPath = a;
+                    } else {
+                        System.out.println("Bad mode. Use 0, 3 or 27.");
+                        return;
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Bad mode. Use 0, 3 or 27.");
+                    return;
+                }
+            }
         } catch (Exception ex) {
-            maybeMode = -1;
-        }
-
-        if (maybeMode == 0 || maybeMode == 3 || maybeMode == 27) {
-            mode = maybeMode;
-            csvPath = second;
-        } else {
-            // try parse second as mode (csv-first case)
+            // first is not an int -> assume csv first
+            csvPath = a;
             try {
-                mode = Integer.parseInt(second);
-                csvPath = first;
-            } catch (Exception ex) {
-                System.out.println("Invalid.Use 0, 3, or 27");
+                int maybe2 = Integer.parseInt(b);
+                if (maybe2 == 0 || maybe2 == 3 || maybe2 == 27) {
+                    mode = maybe2;
+                } else {
+                    System.out.println("Bad mode. Use 0, 3 or 27.");
+                    return;
+                }
+            } catch (Exception ex2) {
+                System.out.println("Bad mode. Use 0, 3 or 27.");
                 return;
             }
-        }
-
-        if (mode != 0 && mode != 3 && mode != 27) {
-            System.out.println("Invalid. Use 0, 3, or 27");
-            return;
         }
 
         int[][] board;
         try {
             board = CSVReader.load(csvPath);
         } catch (Exception e) {
-            System.out.println("cant read the file");
+            System.out.println("Error reading file");
             return;
         }
 
-        SudokuMode sm;
+        SudokuMode m;
         try {
-            sm = ModesFactory.create(mode);
+            m = ModesFactory.create(mode);
         } catch (Exception e) {
-            System.out.println("Invalid");
+            System.out.println("Invalid mode");
             return;
         }
 
-        ValidationResult result = sm.verify(board);
-        ResultPrinter.get().print(result);
+        ValidationResult res = m.verify(board);
+        ResultPrinter.get().print(res);
     }
 }
