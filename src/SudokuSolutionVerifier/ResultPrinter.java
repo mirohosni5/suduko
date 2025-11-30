@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package SudokuSolutionVerifier;
 
 public class ResultPrinter {
@@ -17,16 +13,14 @@ public class ResultPrinter {
 
     public void print(ValidationResult r) {
         if (r == null) {
-            System.out.println("eror validation");
+            System.out.println("VALIDATION ERROR");
             return;
         }
-
         if (r.isValid()) {
-            System.out.println("valid");
+            System.out.println("VALID");
             return;
         }
-
-        System.out.println("Invalid");
+        System.out.println("INVALID");
         for (String s : r.getRows()) System.out.println(s);
         System.out.println("------------------------------------------");
         for (String s : r.getCols()) System.out.println(s);
