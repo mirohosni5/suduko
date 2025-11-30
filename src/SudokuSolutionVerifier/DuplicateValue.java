@@ -4,32 +4,28 @@
  */
 package SudokuSolutionVerifier;
 
-import java.util.List;
+import java.util.*;
 
-/**
- *
- * @author M
- */
 public class DuplicateValue {
+
     private int value;
     private List<Integer> positions;
+    private String kind; // "ROW", "COL", "BOX"
+    private int index;   // row number, col number, or box number (1-based)
 
-    public DuplicateValue(int value, List<Integer> positions) {
+    public DuplicateValue(String kind, int index, int value, List<Integer> positions) {
+        this.kind = kind;
+        this.index = index;
         this.value = value;
-        this.positions = positions;
+        this.positions = positions == null ? new ArrayList<>() : new ArrayList<>(positions);
     }
 
-    public int getValue() {
-        return value;
-    }
+    public String getKind() { return kind; }
+    public int getIndex() { return index; }
+    public int getValue() { return value; }
+    public List<Integer> getPositions() { return positions; }
 
-    public List<Integer> getPositions() {
-        return positions;
-    }
-
-    @Override
     public String toString() {
-        return positions.toString();
+        return kind + " " + index + ", #" + value + ", " + positions;
     }
-
 }
