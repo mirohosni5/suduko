@@ -36,7 +36,7 @@ public class SudokuVerifier {
                 mode = Integer.parseInt(second);
                 csvPath = first;
             } catch (Exception ex) {
-                System.out.println("Invalid mode. Use 0, 3, or 27");
+                System.out.println("Invalid.Use 0, 3, or 27");
                 return;
             }
         }
