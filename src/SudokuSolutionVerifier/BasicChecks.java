@@ -1,6 +1,6 @@
 package SudokuSolutionVerifier;
 
-public class udokuVerifier {
+public class dokuVerifier {
 
     public static void main(String[] args) {
         if (args.length < 2) {
