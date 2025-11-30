@@ -8,7 +8,7 @@ public class SudokuVerifier {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: java SudokuVerifier <mode> <csv>");
+            System.out.println("RUN that is the bonus i think");
             return;
         }
 
