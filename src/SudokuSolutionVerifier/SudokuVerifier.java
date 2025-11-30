@@ -8,7 +8,7 @@ public class SudokuVerifier {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("RUN that is the bonus i think");
+            System.out.println("Usage: java SudokuVerifier <mode> <csv>");
             return;
         }
 
@@ -16,7 +16,7 @@ public class SudokuVerifier {
         try {
             mode = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            System.out.println("Invalid");
+            System.out.println("Invalid mode");
             return;
         }
 
@@ -26,7 +26,7 @@ public class SudokuVerifier {
         try {
             board = CSVReader.load(file);
         } catch (Exception e) {
-            System.out.println("wont read it");
+            System.out.println("Error reading file");
             return;
         }
 
@@ -34,7 +34,7 @@ public class SudokuVerifier {
         try {
             m = ModesFactory.create(mode);
         } catch (Exception e) {
-            System.out.println("Invalid");
+            System.out.println("Invalid mode");
             return;
         }
 
