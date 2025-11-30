@@ -4,43 +4,33 @@
  */
 package SudokuSolutionVerifier;
 
-/**
- *
- * @author M
- */
 public class ResultPrinter {
-     private static ResultPrinter resultPrinter;
+
+    private static ResultPrinter inst;
 
     private ResultPrinter() {}
 
-    public static ResultPrinter getInstance() {
-        if (resultPrinter == null) {
-            resultPrinter = new ResultPrinter();
-        }
-        return resultPrinter;
+    public static ResultPrinter get() {
+        if (inst == null) inst = new ResultPrinter();
+        return inst;
     }
-    public void printResult(ValidationResult result) {
-        if (result.isValid()) {
-            System.out.println("VALID");
-        } else {
-            System.out.println("INVALID");
-            for (int i = 1; i <= 9; i++) {
-                String key = "ROW " + i;
-                if (result.getDuplicates().containsKey(key)) {
-                    for (DuplicateValue info : result.getDuplicates().get(key)) {
-                        System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
-            System.out.println("------------------------------------------");
-         for (int i = 1; i <= 9; i++) {
-                String key = "COL " + i;
-                if (result.getDuplicates().containsKey(key)) {
-                    for (DuplicateValue info : result.getDuplicates().get(key)) {
-                        System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
-         System.out.println("------------------------------------------");
-         for (int i = 1; i <= 9; i++) {
-                String key = "BOX " + i;
-                if (result.getDuplicates().containsKey(key)) {
-                    for (DuplicateValue info : result.getDuplicates().get(key)) {
-                        System.out.println(key + ", #" + info.getValue() + ", " + info.getPositions());}}}
+
+    public void print(ValidationResult r) {
+        if (r == null) {
+            System.out.println("VALIDATION ERROR");
+            return;
         }
+
+        if (r.isValid()) {
+            System.out.println("VALID");
+            return;
+        }
+
+        System.out.println("INVALID");
+        for (String s : r.getRows()) System.out.println(s);
+        System.out.println("------------------------------------------");
+        for (String s : r.getCols()) System.out.println(s);
+        System.out.println("------------------------------------------");
+        for (String s : r.getBoxes()) System.out.println(s);
     }
 }
