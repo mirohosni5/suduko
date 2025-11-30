@@ -4,53 +4,25 @@
  */
 package SudokuSolutionVerifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
-/**
- *
- * @author M
- */
 public class ValidationResult {
-    private boolean valid;
-    private Map<String, List<DuplicateValue>> duplicates;
-    public List<String> errors;
 
-    public ValidationResult() {
-        this.valid = true;
-        this.duplicates = new ConcurrentHashMap<>();
+    private List<String> rows;
+    private List<String> cols;
+    private List<String> boxes;
+
+    public ValidationResult(List<String> r, List<String> c, List<String> b) {
+        this.rows = r == null ? new ArrayList<>() : new ArrayList<>(r);
+        this.cols = c == null ? new ArrayList<>() : new ArrayList<>(c);
+        this.boxes = b == null ? new ArrayList<>() : new ArrayList<>(b);
     }
 
-    public ValidationResult(boolean valid, List<String> errors) {
-        this.valid = valid;
-        this.errors = errors;
-    }
+    public List<String> getRows() { return rows; }
+    public List<String> getCols() { return cols; }
+    public List<String> getBoxes() { return boxes; }
 
     public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
-    public Map<String, List<DuplicateValue>> getDuplicates() {
-        return duplicates;
-    }
-
-    public void addDuplicate(String key, DuplicateValue info) {
-        duplicates.computeIfAbsent(key, k -> new ArrayList<>()).add(info);
-        this.valid = false;
-    }
-
-    public void merge(ValidationResult o) {
-        if (!o.isValid()) {
-            this.valid = false;
-        }
-        o.getDuplicates().forEach((key, list) -> {
-            duplicates.computeIfAbsent(key, k -> new ArrayList<>()).addAll(list);
-        });
+        return rows.isEmpty() && cols.isEmpty() && boxes.isEmpty();
     }
 }
