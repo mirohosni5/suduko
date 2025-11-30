@@ -42,7 +42,7 @@ public class SudokuVerifier {
         }
 
         if (mode != 0 && mode != 3 && mode != 27) {
-            System.out.println("Invalid mode. Use 0, 3, or 27");
+            System.out.println("Invalid. Use 0, 3, or 27");
             return;
         }
 
