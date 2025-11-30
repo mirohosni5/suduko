@@ -17,7 +17,7 @@ public class ResultPrinter {
 
     public void print(ValidationResult r) {
         if (r == null) {
-            System.out.println("ero");
+            System.out.println("eror validation");
             return;
         }
 
