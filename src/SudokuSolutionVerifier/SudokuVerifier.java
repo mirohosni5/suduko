@@ -26,7 +26,7 @@ public class SudokuVerifier {
         try {
             board = CSVReader.load(file);
         } catch (Exception e) {
-            System.out.println("Error reading file");
+            System.out.println("");
             return;
         }
 
