@@ -18,7 +18,7 @@ public class SudokuVerifier {
         String csvPath;
         int mode = -1;
 
-        
+
         try {
             int maybe = Integer.parseInt(a);
             if (maybe == 0 || maybe == 3 || maybe == 27) {
