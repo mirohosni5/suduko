@@ -25,7 +25,7 @@ public class SudokuVerifier {
                 mode = maybe;
                 csvPath = b;
             } else {
-                /
+                
                 try {
                     int maybe2 = Integer.parseInt(b);
                     if (maybe2 == 0 || maybe2 == 3 || maybe2 == 27) {
@@ -41,7 +41,7 @@ public class SudokuVerifier {
                 }
             }
         } catch (Exception ex) {
-            // first is not an int -> assume csv first
+            
             csvPath = a;
             try {
                 int maybe2 = Integer.parseInt(b);
