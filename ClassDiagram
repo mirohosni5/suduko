@@ -1,0 +1,91 @@
+@startuml
+title Class diagram — Lab9 SudokuSolutionVerifier
+
+package "SudokuSolutionVerifier" {
+
+  class SudokuVerifier {
+    + main(args : String[])
+  }
+
+  interface SudokuMode {
+    + verify(board : int[][]) : ValidationResult
+  }
+
+  class ModesFactory {
+    + create(mode : int) : SudokuMode
+  }
+
+  class SequentialMode {
+    + verify(board : int[][]) : ValidationResult
+  }
+
+  class ThreeThreadMode {
+    + verify(board : int[][]) : ValidationResult
+  }
+
+  class TwentySevenThreadMode {
+    + verify(board : int[][]) : ValidationResult
+  }
+
+  class BasicChecks {
+    - grid : int[][]
+    + BasicChecks(g : int[][])
+    + checkRowsDup() : List<DuplicateValue>
+    + checkColsDup() : List<DuplicateValue>
+    + checkBoxesDup() : List<DuplicateValue>
+  }
+
+  class DuplicateValue {
+    - kind : String
+    - index : int
+    - value : int
+    - positions : List<Integer>
+    + DuplicateValue(kind, index, value, positions)
+    + toString() : String
+  }
+
+  class ValidationResult {
+    - rowDups : List<DuplicateValue>
+    - colDups : List<DuplicateValue>
+    - boxDups : List<DuplicateValue>
+    + ValidationResult(...)
+    + isValid() : boolean
+    + getRows() : List<String>
+  }
+
+  class ResultPrinter {
+    + get() : ResultPrinter
+    + print(r : ValidationResult)
+  }
+
+  class CSVReader {
+    + load(path : String) : int[][]
+  }
+
+  ' relationships
+  SudokuVerifier --> CSVReader : loads
+  SudokuVerifier --> ModesFactory : selects
+  SudokuVerifier --> ResultPrinter : prints
+  SudokuVerifier --> SudokuMode : uses
+
+  SudokuMode <|-- SequentialMode
+  SudokuMode <|-- ThreeThreadMode
+  SudokuMode <|-- TwentySevenThreadMode
+
+  SequentialMode --> BasicChecks : uses
+  ThreeThreadMode --> BasicChecks : uses
+  TwentySevenThreadMode --> BasicChecks : uses
+
+  BasicChecks --> DuplicateValue : creates
+  ValidationResult --> DuplicateValue : stores
+  ResultPrinter --> ValidationResult : reads
+
+  SequentialMode --> ValidationResult : returns
+  ThreeThreadMode --> ValidationResult : returns
+  TwentySevenThreadMode --> ValidationResult : returns
+}
+
+note right
+  Context menu: diagram prepared for presentation
+end note
+@endum
